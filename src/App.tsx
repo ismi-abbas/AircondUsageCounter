@@ -17,7 +17,7 @@ function App(): JSX.Element {
       setTotalUsage(() => {
         return usage.reduce((acc, curr) => acc + curr, 0);
       });
-      setInputValue('');
+      setInputValue(inputValue);
     }
   };
 
@@ -81,35 +81,61 @@ function App(): JSX.Element {
             {totalUsage > 1 ? 'hours' : 'hour'}
           </Text>
 
-          <Div bg="gray200" alignItems="center" justifyContent="center">
-            {usage.map((usage, index) => {
-              return (
-                <Div
-                  mt={10}
-                  w="100%"
-                  key={index}
-                  flexDir="row"
-                  justifyContent="space-around"
-                  alignItems="center">
-                  <Text fontSize="lg" fontWeight="400">
-                    Use for {usage} {usage > 1 ? 'hours' : 'hour'}
-                  </Text>
-                  <Button
-                    ml={10}
-                    bg="purple500"
-                    rounded="circle"
-                    onPress={() => {
-                      setUsage(prevUsage => {
-                        const updatedUsage = [...prevUsage];
-                        updatedUsage.splice(index, 1);
-                        return updatedUsage;
-                      });
-                    }}>
-                    Remove
-                  </Button>
-                </Div>
-              );
-            })}
+          <Div
+            bg="gray100"
+            alignItems="center"
+            justifyContent="center"
+            rounded="lg"
+            mt={5}
+            mx={20}
+            py={10}
+            pr={80}
+            pl={20}
+            w={350}>
+            {usage.length > 0 ? (
+              usage.map((usage, index) => {
+                return (
+                  <Div
+                    row
+                    mt={5}
+                    w="100%"
+                    key={index}
+                    justifyContent="space-between"
+                    alignItems="center">
+                    <Div row alignItems="center" justifyContent="flex-start">
+                      <Text fontSize="lg" fontWeight="400" w="75%">
+                        Use for {usage} {usage > 1 ? 'hours' : 'hour'}
+                      </Text>
+                      <Button
+                        ml={20}
+                        right={0}
+                        rounded="lg"
+                        bg="white"
+                        mt="sm"
+                        px="sm"
+                        py="sm"
+                        borderWidth={1}
+                        borderColor="red500"
+                        color="red500"
+                        underlayColor="red100"
+                        onPress={() => {
+                          setUsage(prevUsage => {
+                            const updatedUsage = [...prevUsage];
+                            updatedUsage.splice(index, 1);
+                            return updatedUsage;
+                          });
+                        }}>
+                        Remove
+                      </Button>
+                    </Div>
+                  </Div>
+                );
+              })
+            ) : (
+              <Text textAlign="center" fontSize="lg">
+                No usage
+              </Text>
+            )}
           </Div>
         </Div>
 
