@@ -2,6 +2,7 @@ import React, {useEffect, useState} from 'react';
 import {Button, Div, Input, Text} from 'react-native-magnus';
 import {ScrollView} from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import {format} from 'date-fns';
 
 const Counter = () => {
   const [usage, setUsage] = useState<any[]>([]);
@@ -9,13 +10,14 @@ const Counter = () => {
   const [inputValue, setInputValue] = useState<string>('');
 
   const handleAddToRecord = async () => {
+    const time = format(new Date(Date.now()), 'dd-MM HH:mm:ss');
     const parsedValue = parseInt(inputValue, 10);
     if (!isNaN(parsedValue)) {
       setUsage(prevUsage => {
-        return [...prevUsage, parsedValue];
+        return [...prevUsage, {value: parsedValue, time}];
       });
       setTotalUsage(() => {
-        return usage.reduce((a, b) => a + b, 0);
+        return usage.reduce((a, b) => a + b.value, 0);
       });
       setInputValue(inputValue);
     }
@@ -58,7 +60,7 @@ const Counter = () => {
   }, [usage, totalUsage]);
 
   useEffect(() => {
-    setTotalUsage(usage.reduce((a, b) => a + b, 0));
+    setTotalUsage(usage.reduce((a, b) => a + b.value, 0));
   }, [usage]);
 
   return (
@@ -114,7 +116,7 @@ const Counter = () => {
           pl={20}
           w={350}>
           {usage.length > 0 ? (
-            usage.map((usage, index) => {
+            usage.map(({value, time}, index) => {
               return (
                 <Div
                   row
@@ -125,7 +127,8 @@ const Counter = () => {
                   alignItems="center">
                   <Div row alignItems="center" justifyContent="flex-start">
                     <Text fontSize="lg" fontWeight="400" w="75%">
-                      Use for {usage} {usage > 1 ? 'hours' : 'hour'}
+                      {value} {value > 1 ? 'hours' : 'hour'} usage at{' '}
+                      <Text fontWeight="bold">{time}</Text>
                     </Text>
                     <Button
                       ml={20}
