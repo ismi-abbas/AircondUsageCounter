@@ -1,13 +1,14 @@
 import React, {useEffect, useState} from 'react';
 import {Button, Div, Input, Text} from 'react-native-magnus';
 import {ScrollView} from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const Counter = () => {
   const [usage, setUsage] = useState<any[]>([]);
   const [totalUsage, setTotalUsage] = useState<number>(0);
   const [inputValue, setInputValue] = useState<string>('');
 
-  const handleAddToRecord = () => {
+  const handleAddToRecord = async () => {
     const parsedValue = parseInt(inputValue, 10);
     if (!isNaN(parsedValue)) {
       setUsage(prevUsage => {
@@ -19,6 +20,48 @@ const Counter = () => {
       setInputValue(inputValue);
     }
   };
+
+  const removeFromRecord = async (index: number) => {
+    setUsage(prevUsage => {
+      const updatedUsage = [...prevUsage];
+      updatedUsage.splice(index, 1);
+      return updatedUsage;
+    });
+  };
+
+  const getData = async () => {
+    try {
+      const keys = await AsyncStorage.getAllKeys();
+
+      for (const key of keys) {
+        let data = await AsyncStorage.getItem(key);
+        if (key === 'usage') {
+          setUsage(JSON.parse(data || '[]'));
+        } else if (key === 'totalUsage') {
+          setTotalUsage(parseInt(data || '0', 10));
+        }
+      }
+    } catch (e) {
+      console.log(e);
+    }
+  };
+
+  const setData = async () => {
+    try {
+      await AsyncStorage.setItem('totalUsage', JSON.stringify(totalUsage));
+      await AsyncStorage.setItem('usage', JSON.stringify(usage));
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    getData();
+  }, []);
+
+  useEffect(() => {
+    setData();
+  }, [usage, totalUsage]);
 
   useEffect(() => {
     setTotalUsage(usage.reduce((a, b) => a + b, 0));
@@ -102,13 +145,7 @@ const Counter = () => {
                       borderColor="red500"
                       color="red500"
                       underlayColor="red100"
-                      onPress={() => {
-                        setUsage(prevUsage => {
-                          const updatedUsage = [...prevUsage];
-                          updatedUsage.splice(index, 1);
-                          return updatedUsage;
-                        });
-                      }}>
+                      onPress={() => removeFromRecord(index)}>
                       Remove
                     </Button>
                   </Div>

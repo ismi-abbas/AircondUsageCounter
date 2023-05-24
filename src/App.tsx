@@ -21,7 +21,7 @@ function App(): JSX.Element {
         </Div>
         <Counter />
         <Div>
-          <Timer />
+          <Timer deadline={Date.now().toString()} />
         </Div>
       </ScrollView>
     </SafeAreaView>
