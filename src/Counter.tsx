@@ -31,16 +31,10 @@ const Counter = () => {
 
   const getData = async () => {
     try {
-      const keys = await AsyncStorage.getAllKeys();
-
-      for (const key of keys) {
-        let data = await AsyncStorage.getItem(key);
-        if (key === 'usage') {
-          setUsage(JSON.parse(data || '[]'));
-        } else if (key === 'totalUsage') {
-          setTotalUsage(parseInt(data || '0', 10));
-        }
-      }
+      let usageData = await AsyncStorage.getItem('usage');
+      let totalUsageData = await AsyncStorage.getItem('totalUsage');
+      setUsage(JSON.parse(usageData || '[]'));
+      setTotalUsage(parseInt(totalUsageData || '0', 10));
     } catch (e) {
       console.log(e);
     }
