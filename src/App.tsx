@@ -9,10 +9,10 @@ function App(): JSX.Element {
 
   return (
     <SafeAreaView>
-      <StatusBar barStyle={isDarkMode ? 'light-content' : 'dark-content'} />
+      <StatusBar barStyle={isDarkMode ? 'dark-content' : 'light-content'} />
       <ScrollView>
-        <Div mt="2xl">
-          <Text textAlign="center" fontSize="5xl" fontWeight="bold">
+        <Div mt="2xl" alignItems="center">
+          <Text textAlign="center" fontSize="5xl" fontWeight="bold" w={250}>
             Aircond Usage Counter
           </Text>
           <Text fontSize="lg" color="gray600" mt="md" textAlign="center">

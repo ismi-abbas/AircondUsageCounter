@@ -71,28 +71,29 @@ const Counter = () => {
         </Text>
         <Div flexDir="row" justifyContent="space-between" alignItems="center">
           <Input
-            flex={1}
             mx="xl"
             mt="xl"
             mb="xl"
-            py="lg"
-            placeholder="0"
-            borderColor="gray200"
+            py="sm"
+            placeholder="Usage"
+            borderColor="gray400"
             borderWidth={2}
             keyboardType="number-pad"
-            h={40}
             value={inputValue}
+            w={200}
             onChangeText={text => setInputValue(text)}
           />
           <Button
-            mx="xl"
+            flex={1}
             mt="xl"
+            mr={10}
             mb="xl"
-            py="lg"
+            py="sm"
             h={40}
             bg="orange400"
             rounded="circle"
-            onPress={handleAddToRecord}>
+            onPress={handleAddToRecord}
+            textAlign="center">
             Add To Record
           </Button>
         </Div>
